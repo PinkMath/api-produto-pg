@@ -21,12 +21,12 @@ app.use(express.json());
 // ROTAS
 // ============================================================
 
-const produtoRoutes = require("./routes/produtoRoutes");
-app.use("/produtos", produtoRoutes);
+const clienteRoutes = require("./routes/clienteRoutes");
+app.use("/clientes", clienteRoutes);
 
 app.get("/", (req, res) => {
   res.json({
-    mensagem: "API de Produtos com PostgreSQL",
+    mensagem: "API de cliente com PostgreSQL",
     versao: "3.0",
     ambiente: process.env.NODE_ENV || "development",
     banco: "PostgreSQL",

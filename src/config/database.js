@@ -44,13 +44,16 @@ pool.connect((erro, client, release) => {
 
 const criarTabela = async () => {
   const sql = `
-    CREATE TABLE IF NOT EXISTS produtos (
+    CREATE TABLE IF NOT EXISTS clientes (
       id         SERIAL PRIMARY KEY,
       nome       VARCHAR(255)   NOT NULL,
-      preco      DECIMAL(10,2)  NOT NULL,
-      estoque    INTEGER        NOT NULL,
-      categoria  VARCHAR(100)   NOT NULL,
-      criado_em  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      cpf       varchar(11)   NOT NULL,
+      telefone       VARCHAR(13)   NOT NULL,
+      email       VARCHAR(255)   NOT NULL,
+      datanasc       date   NOT NULL,
+      rua       varchar(300)   NOT NULL,
+      numeroCasa       int   NOT NULL,
+      bairro       varchar(300)   NOT NULL
     )
   `;
 

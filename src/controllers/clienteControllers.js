@@ -1,18 +1,18 @@
 // Importar as funções do Model
-const ProdutoModel = require("../models/produtoModels");
+const clienteModel = require("../models/clienteModels");
 
 // ============================================================
 // FUNÇÃO: listarTodos (ASSÍNCRONA)
-// ROTA: GET /produtos
-// DESCRIÇÃO: Lista todos os produtos do banco de dados
+// ROTA: GET /clientes
+// DESCRIÇÃO: Lista todos os clientes do banco de dados
 // ============================================================
 async function listarTodos(req, res) {
   try {
-    const produtos = await ProdutoModel.listarTodos();
-    res.status(200).json(produtos);
+    const clientes = await clienteModel.listarTodos();
+    res.status(200).json(clientes);
   } catch (erro) {
     res.status(500).json({
-      mensagem: "Erro ao listar produtos",
+      mensagem: "Erro ao listar clientes",
       erro: erro.message,
     });
   }
@@ -20,7 +20,7 @@ async function listarTodos(req, res) {
 
 // ============================================================
 // FUNÇÃO: buscarPorId (ASSÍNCRONA)
-// ROTA: GET /produtos/:id
+// ROTA: GET /clientes/:id
 // ============================================================
 async function buscarPorId(req, res) {
   try {
@@ -32,18 +32,18 @@ async function buscarPorId(req, res) {
       });
     }
 
-    const produto = await ProdutoModel.buscarPorId(id);
+    const cliente = await clienteModel.buscarPorId(id);
 
-    if (produto) {
-      res.status(200).json(produto);
+    if (cliente) {
+      res.status(200).json(cliente);
     } else {
       res.status(404).json({
-        mensagem: `Produto ${id} não encontrado`,
+        mensagem: `cliente ${id} não encontrado`,
       });
     }
   } catch (erro) {
     res.status(500).json({
-      mensagem: "Erro ao buscar produto",
+      mensagem: "Erro ao buscar cliente",
       erro: erro.message,
     });
   }
@@ -51,42 +51,44 @@ async function buscarPorId(req, res) {
 
 // ============================================================
 // FUNÇÃO: criar (ASSÍNCRONA)
-// ROTA: POST /produtos
+// ROTA: POST /clientes
 // ============================================================
 async function criar(req, res) {
   try {
-    const { nome, preco, estoque, categoria } = req.body;
+    const { nome, cpf, telefone, email, datanasc, rua, numeroCasa, bairro } =
+      req.body;
 
     // Validações
-    if (!nome || !preco || !estoque || !categoria) {
+    if (
+      !nome ||
+      !cpf ||
+      !telefone ||
+      !email ||
+      !datanasc ||
+      !rua ||
+      !numeroCasa ||
+      !bairro
+    ) {
       return res.status(400).json({
         mensagem: "Todos os campos são obrigatórios",
       });
     }
 
-    if (parseFloat(preco) <= 0) {
-      return res.status(400).json({
-        mensagem: "O preço deve ser maior que zero",
-      });
-    }
-
-    if (parseInt(estoque) < 0) {
-      return res.status(400).json({
-        mensagem: "O estoque não pode ser negativo",
-      });
-    }
-
-    const novoProduto = await ProdutoModel.criar({
+    const novocliente = await clienteModel.criar({
       nome,
-      preco,
-      estoque,
-      categoria,
+      cpf,
+      telefone,
+      email,
+      datanasc,
+      rua,
+      numeroCasa,
+      bairro,
     });
 
-    res.status(201).json(novoProduto);
+    res.status(201).json(novocliente);
   } catch (erro) {
     res.status(500).json({
-      mensagem: "Erro ao criar produto",
+      mensagem: "Erro ao criar cliente",
       erro: erro.message,
     });
   }
@@ -94,12 +96,13 @@ async function criar(req, res) {
 
 // ============================================================
 // FUNÇÃO: atualizar (ASSÍNCRONA)
-// ROTA: PUT /produtos/:id
+// ROTA: PUT /clientes/:id
 // ============================================================
 async function atualizar(req, res) {
   try {
     const id = parseInt(req.params.id);
-    const { nome, preco, estoque, categoria } = req.body;
+    const { nome, cpf, telefone, email, datanasc, rua, numeroCasa, bairro } =
+      req.body;
 
     if (isNaN(id)) {
       return res.status(400).json({
@@ -107,29 +110,42 @@ async function atualizar(req, res) {
       });
     }
 
-    if (!nome || !preco || !estoque || !categoria) {
+    if (
+      !nome ||
+      !cpf ||
+      !telefone ||
+      !email ||
+      !datanasc ||
+      !rua ||
+      !numeroCasa ||
+      !bairro
+    ) {
       return res.status(400).json({
         mensagem: "Todos os campos são obrigatórios",
       });
     }
 
-    const produtoAtualizado = await ProdutoModel.atualizar(id, {
+    const clienteAtualizado = await clienteModel.atualizar(id, {
       nome,
-      preco,
-      estoque,
-      categoria,
+      cpf,
+      telefone,
+      email,
+      datanasc,
+      rua,
+      numeroCasa,
+      bairro,
     });
 
-    if (produtoAtualizado) {
-      res.status(200).json(produtoAtualizado);
+    if (clienteAtualizado) {
+      res.status(200).json(clienteAtualizado);
     } else {
       res.status(404).json({
-        mensagem: `Produto ${id} não encontrado`,
+        mensagem: `cliente ${id} não encontrado`,
       });
     }
   } catch (erro) {
     res.status(500).json({
-      mensagem: "Erro ao atualizar produto",
+      mensagem: "Erro ao atualizar cliente",
       erro: erro.message,
     });
   }
@@ -137,7 +153,7 @@ async function atualizar(req, res) {
 
 // ============================================================
 // FUNÇÃO: deletar (ASSÍNCRONA)
-// ROTA: DELETE /produtos/:id
+// ROTA: DELETE /clientes/:id
 // ============================================================
 async function deletar(req, res) {
   try {
@@ -149,20 +165,20 @@ async function deletar(req, res) {
       });
     }
 
-    const deletado = await ProdutoModel.deletar(id);
+    const deletado = await clienteModel.deletar(id);
 
     if (deletado) {
       res.status(200).json({
-        mensagem: `Produto ${id} removido com sucesso`,
+        mensagem: `cliente ${id} removido com sucesso`,
       });
     } else {
       res.status(404).json({
-        mensagem: `Produto ${id} não encontrado`,
+        mensagem: `cliente ${id} não encontrado`,
       });
     }
   } catch (erro) {
     res.status(500).json({
-      mensagem: "Erro ao deletar produto",
+      mensagem: "Erro ao deletar cliente",
       erro: erro.message,
     });
   }
@@ -170,16 +186,16 @@ async function deletar(req, res) {
 
 // ============================================================
 // FUNÇÃO: buscarPorCategoria (ASSÍNCRONA)
-// ROTA: GET /produtos/categoria/:categoria
+// ROTA: GET /clientes/categoria/:categoria
 // ============================================================
 async function buscarPorCategoria(req, res) {
   try {
     const { categoria } = req.params;
-    const produtos = await ProdutoModel.buscarPorCategoria(categoria);
-    res.status(200).json(produtos);
+    const clientes = await clienteModel.buscarPorCategoria(categoria);
+    res.status(200).json(clientes);
   } catch (erro) {
     res.status(500).json({
-      mensagem: "Erro ao buscar produtos por categoria",
+      mensagem: "Erro ao buscar clientes por categoria",
       erro: erro.message,
     });
   }
